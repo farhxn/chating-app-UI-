@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Chat</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <main class="chat-area">
+            <header class="chat-header">
+                <div class="chat-contact-info">
+                    <div class="logo">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div class="header-text">
+                        <span class="name">Nexus AI</span>
+                        <span class="status">Always Online</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+                    <button class="icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                </div>
+            </header>
+            <div class="messages-container" id="messagesContainer">
+                <div class="message received">
+                    <div class="message-content">
+                        Hello! I'm Nexus AI. How can I assist you today?
+                    </div>
+                    <span class="message-time">Now</span>
+                </div>
+            </div>
+            <div class="input-area">
+                <div id="attachmentPreview" class="attachment-preview-container" style="display: none;">
+                    <div class="preview-content">
+                        <img id="previewImage" src="" alt="Preview" style="display: none;">
+                        <div id="previewFile" style="display: none;">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            <span id="previewFileName"></span>
+                        </div>
+                        <button id="removeAttachmentBtn" class="remove-attachment-btn"><i
+                                class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+                <input type="file" id="fileInput" hidden accept="image/*,.pdf">
+                <div class="input-controls">
+                    <button class="icon-btn attach-btn" id="attachBtn"><i class="fa-solid fa-paperclip"></i></button>
+                    <div class="input-wrapper">
+                        <input type="text" id="messageInput" placeholder="Message Nexus AI...">
+                        <button class="icon-btn emoji-btn" id="emojiBtn"><i
+                                class="fa-regular fa-face-smile"></i></button>
+                        <div class="emoji-picker" id="emojiPicker">
+                            <div class="emoji-grid">
+                                <span>😀</span><span>😃</span><span>😄</span><span>😁</span><span>😆</span><span>😅</span>
+                                <span>😂</span><span>🤣</span><span>😊</span><span>😇</span><span>🙂</span><span>🙃</span>
+                                <span>😉</span><span>😌</span><span>😍</span><span>🥰</span><span>😘</span><span>😗</span>
+                                <span>😙</span><span>😚</span><span>😋</span><span>😛</span><span>😜</span><span>😝</span>
+                                <span>🤪</span><span>🤨</span><span>🧐</span><span>🤓</span><span>😎</span><span>🤩</span>
+                                <span>🥳</span><span>😏</span><span>😒</span><span>😞</span><span>😔</span><span>😟</span>
+                                <span>😕</span><span>🙁</span><span>☹️</span><span>😣</span><span>😖</span><span>😫</span>
+                                <span>😩</span><span>🥺</span><span>😢</span><span>😭</span><span>😤</span><span>😠</span>
+                                <span>😡</span><span>🤬</span><span>🤯</span><span>😳</span><span>🥵</span><span>🥶</span>
+                                <span>😱</span><span>😨</span><span>😰</span><span>😥</span><span>😓</span><span>🤗</span>
+                                <span>🤔</span><span>🤭</span><span>🤫</span><span>🤥</span><span>😶</span><span>😐</span>
+                                <span>😑</span><span>😬</span><span>🙄</span><span>😯</span><span>😦</span><span>😧</span>
+                                <span>😮</span><span>😲</span><span>🥱</span><span>😴</span><span>🤤</span><span>😪</span>
+                                <span>😵</span><span>🤐</span><span>🥴</span><span>🤢</span><span>🤮</span><span>🤧</span>
+                                <span>😷</span><span>🤒</span><span>🤕</span><span>🤑</span><span>🤠</span><span>😈</span>
+                                <span>👿</span><span>👹</span><span>👺</span><span>🤡</span><span>💩</span><span>👻</span>
+                                <span>💀</span><span>☠️</span><span>👽</span><span>👾</span><span>🤖</span><span>🎃</span>
+                                <span>😺</span><span>😸</span><span>😹</span><span>😻</span><span>😼</span><span>😽</span>
+                                <span>🙀</span><span>😿</span><span>😾</span><span>👍</span><span>👎</span><span>👊</span>
+                                <span>✊</span><span>🤛</span><span>🤜</span><span>🤞</span><span>✌️</span><span>🤟</span>
+                                <span>🤘</span><span>👌</span><span>🤏</span><span>👈</span><span>👉</span><span>👆</span>
+                                <span>👇</span><span>☝️</span><span>✋</span><span>🤚</span><span>🖐</span><span>🖖</span>
+                                <span>👋</span><span>🤙</span><span>💪</span><span>🦾</span><span>🖕</span><span>✍️</span>
+                                <span>🙏</span><span>🦶</span><span>🦵</span><span>🦿</span><span>💄</span><span>💋</span>
+                                <span>👄</span><span>🦷</span><span>👅</span><span>👂</span><span>🦻</span><span>👃</span>
+                                <span>👣</span><span>👁</span><span>👀</span><span>🧠</span><span>🗣</span><span>👤</span>
+                                <span>👥</span><span>🫂</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="send-btn" id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
