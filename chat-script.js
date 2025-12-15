@@ -13,7 +13,8 @@ const schedulePanel = document.querySelector('.schedule-panel');
 let conversationHistory = [];
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await getCsrfToken(); // Fetch CSRF token once on page load
     loadChatTips();
     initThemeToggle();
     initScheduleToggle();
@@ -86,10 +87,10 @@ function initScheduleToggle() {
 
 function setScheduleExpanded(expanded) {
     if (!schedulePanel || !scheduleSection || !scheduleExpandBtn) return;
-    
+
     schedulePanel.setAttribute('data-expanded', expanded ? 'true' : 'false');
     scheduleExpandBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-    
+
     if (expanded && !scheduleSection.classList.contains('hidden')) {
         scheduleSection.classList.remove('hidden');
     } else if (!expanded) {
@@ -154,11 +155,29 @@ function fillMessage(text) {
 let CSRF_TOKEN = '';
 
 async function getCsrfToken() {
-    const res = await fetch(`${API_BASE}/csrf-token`, {
-        credentials: 'include'
-    });
-    const data = await res.json();
-    CSRF_TOKEN = data.csrf_token;
+    try {
+        const res = await fetch(`${API_BASE}/csrf-token`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        const data = await res.json();
+        CSRF_TOKEN = data.csrf_token;
+        console.log('CSRF token fetched:', CSRF_TOKEN ? 'Success' : 'Failed');
+        console.log('Token value:', CSRF_TOKEN);
+    } catch (error) {
+        console.error('Error fetching CSRF token:', error);
+    }
+}
+
+// Helper function to get cookie value
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
 }
 
 
@@ -184,27 +203,26 @@ async function sendMessage() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
     try {
-        await getCsrfToken();
-        console.log(CSRF_TOKEN);
-        
-        const response = await fetch(`${API_BASE}/chat`, {
-            method: 'POST',
+        // Prepare URL parameters for GET request
+        const params = new URLSearchParams({
+            message: message,
+            history: JSON.stringify(conversationHistory)
+        });
+
+        const response = await fetch(`${API_BASE}/chat?${params.toString()}`, {
+            method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': CSRF_TOKEN
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': CSRF_TOKEN
             },
-            credentials: 'include',
-            body: JSON.stringify({
-                message: message,
-                history: conversationHistory
-            })
+            credentials: 'include'
         });
 
         const result = await response.json();
         loadingDiv.remove();
 
         console.log(result);
-        
+
 
         if (result.error) {
             addMessageToChat(`❌ Error: ${result.error}`, 'agent');
