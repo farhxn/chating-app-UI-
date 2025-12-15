@@ -185,6 +185,8 @@ async function sendMessage() {
 
     try {
         await getCsrfToken();
+        console.log(CSRF_TOKEN);
+        
         const response = await fetch(`${API_BASE}/chat`, {
             method: 'POST',
             headers: {
