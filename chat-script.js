@@ -215,7 +215,6 @@ async function sendMessage() {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': CSRF_TOKEN
             },
-            credentials: 'include'
         });
 
         const result = await response.json();
