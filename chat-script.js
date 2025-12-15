@@ -213,7 +213,7 @@ async function sendMessage() {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'X-CSRF-TOKEN': CSRF_TOKEN
+                // 'X-CSRF-TOKEN': CSRF_TOKEN
             },
         });
 
