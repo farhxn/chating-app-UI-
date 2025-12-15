@@ -1,100 +1,2697 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Chat</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Study Planner AI - Transform Your Exam Prep</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #0f1419;
+            --text-secondary: #6b7280;
+            --accent-1: #06b6d4;
+            --accent-2: #10b981;
+            --accent-3: #f97316;
+            --gradient-main: linear-gradient(135deg, #06b6d4 0%, #10b981 50%, #f97316 100%);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        body[data-theme="dark"] {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a1f2e;
+            --text-primary: #f0f4f8;
+            --text-secondary: #9ca3af;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            background: var(--bg-secondary);
+            border-bottom: 2px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.4s ease;
+            padding: 15px 0;
+        }
+
+        .navbar:hover {
+            box-shadow: 0 8px 32px rgba(6, 182, 212, 0.15);
+            border-bottom-color: var(--accent-1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.6rem;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        .navbar-brand:hover {
+            transform: translateX(8px);
+            filter: drop-shadow(0 5px 15px rgba(6, 182, 212, 0.3));
+        }
+
+        .navbar-brand i {
+            font-size: 1.8rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .navbar-brand:hover i {
+            transform: scale(1.15) rotate(-10deg);
+        }
+
+        .navbar-nav {
+            gap: 8px;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: var(--text-secondary) !important;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-weight: 600;
+            padding: 12px 20px !important;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(6, 182, 212, 0.3);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-main);
+            transition: width 0.4s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            border: 2px solid var(--accent-1);
+            color: white;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.3);
+            position: relative;
+            overflow: hidden;
+            margin-left: 10px;
+        }
+
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .theme-toggle:hover::before {
+            opacity: 1;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.15) rotate(25deg);
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+            box-shadow: 0 10px 35px rgba(6, 182, 212, 0.5);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95) rotate(25deg);
+        }
+
+        .navbar-toggler {
+            border: 2px solid var(--accent-1) !important;
+            padding: 6px 12px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-toggler:hover {
+            background: rgba(6, 182, 212, 0.1);
+            transform: scale(1.05);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2306b6d4' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-main);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            animation: slideDown 0.8s ease-out;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            animation: slideUp 0.8s ease-out 0.2s backwards;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .hero .btn-primary {
+            background: white;
+            color: var(--accent-1);
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(6, 182, 212, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .hero .btn-primary:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .hero .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            background: var(--bg-primary);
+        }
+
+        .hero .btn-primary:focus-visible {
+            outline: 3px solid var(--accent-1);
+            outline-offset: 2px;
+        }
+
+        .hero .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 16px 48px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero .btn-secondary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: white;
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .hero .btn-secondary:hover::before {
+            left: 0;
+        }
+
+        .hero .btn-secondary:hover {
+            color: var(--accent-1);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        .hero .btn-secondary:focus-visible {
+            outline: 3px solid white;
+            outline-offset: 2px;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==================== PLANNER SECTION ==================== */
+        .planner-section {
+            padding: 80px 20px;
+            background: var(--bg-primary);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 4rem;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-main);
+            border-radius: 2px;
+        }
+
+        /* Study Methods Container */
+        .study-methods-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+
+        .method-card {
+            background: var(--bg-secondary);
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .method-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient-main);
+            transition: all 0.3s ease;
+        }
+
+        .method-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(6, 182, 212, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .method-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .method-card:hover::after {
+            opacity: 1;
+        }
+
+        .method-icon {
+            font-size: 5rem;
+            margin-bottom: 25px;
+            animation: bounceIn 0.6s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .method-card:hover .method-icon {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .method-card h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .method-card:hover h3 {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .method-card p {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .method-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+            width: 100%;
+            gap: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .method-features li {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 0;
+        }
+
+        .method-features li:hover {
+            color: var(--text-primary);
+            transform: translateX(8px);
+        }
+
+        .method-features i {
+            color: var(--accent-2);
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .btn-method {
+            background: var(--gradient-main);
+            color: white;
+            border: none;
+            padding: 16px 50px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: auto;
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-method::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-method:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-method:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(6, 182, 212, 0.5);
+        }
+
+        .btn-method i {
+            font-size: 1.3rem;
+        }
+
+        /* Accessibility & Focus States */
+        .btn-method:focus-visible,
+        .btn-generate:focus-visible,
+        .add-topic-btn:focus-visible,
+        .remove-topic-btn:focus-visible {
+            outline: 3px solid var(--accent-1);
+            outline-offset: 3px;
+            box-shadow: 0 0 0 5px rgba(6, 182, 212, 0.2);
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Manual Planner */
+        .manual-planner {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .manual-planner.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-planner {
+            position: absolute;
+            top: 25px;
+            right: 40px;
+            background: white;
+            border: none;
+            font-size: 2.5rem;
+            cursor: pointer;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            z-index: 1001;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: var(--accent-1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .close-planner:hover {
+            background: var(--accent-1);
+            color: white;
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        .planner-container {
+            max-width: 1100px;
+            width: 100%;
+            background: var(--bg-secondary);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideInUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .form-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.05rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-weight: 500;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-1);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-group input:invalid:not(:placeholder-shown) {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+        }
+
+        .form-group input:valid:not(:placeholder-shown) {
+            border-color: var(--accent-2);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+
+        /* ==================== TOPICS SECTION ==================== */
+        .topics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .topics-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .add-topic-btn {
+            background: var(--accent-2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .add-topic-btn:hover {
+            background: var(--accent-1);
+            transform: translateY(-2px);
+        }
+
+        .topics-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .topic-card {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 80px;
+            gap: 15px;
+            align-items: center;
+            padding: 18px;
+            background: var(--bg-primary);
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .topic-card {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+
+        .topic-card:hover {
+            border-color: var(--accent-1);
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.15);
+            transform: translateY(-3px);
+            background: var(--bg-secondary);
+        }
+
+        .topic-card input,
+        .topic-card select {
+            padding: 12px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .topic-card input:focus,
+        .topic-card select:focus {
+            outline: none;
+            border-color: var(--accent-1);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+            transform: scale(1.02);
+        }
+
+        .remove-topic-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .remove-topic-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        /* ==================== BUTTONS ==================== */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-generate {
+            background: var(--gradient-main);
+            color: white;
+            border: none;
+            padding: 18px 60px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 12px 35px rgba(6, 182, 212, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-generate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-generate:hover::before {
+            left: 100%;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 50px rgba(6, 182, 212, 0.5);
+        }
+
+        .btn-generate:active {
+            transform: translateY(-2px);
+        }
+
+        .add-topic-btn {
+            background: var(--accent-2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .add-topic-btn:hover {
+            background: var(--accent-1);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
+        }
+
+        /* ==================== SCHEDULE DISPLAY ==================== */
+        .schedule-container {
+            margin-top: 40px;
+            padding: 30px;
+            background: var(--bg-primary);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .schedule-container.show {
+            display: block;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .schedule-header {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .schedule-header {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 25px 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(6, 182, 212, 0.2);
+            border-color: var(--accent-1);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-top: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .schedule-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .day-card {
+            background: var(--bg-secondary);
+            border-left: 5px solid var(--accent-1);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-1), transparent);
+        }
+
+        .day-card:hover {
+            transform: translateX(8px) translateY(-5px);
+            box-shadow: 0 12px 35px rgba(6, 182, 212, 0.2);
+            border-left-color: var(--accent-2);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .day-card:hover .day-header {
+            border-bottom-color: var(--accent-1);
+        }
+
+        .day-date {
+            font-weight: 800;
+            font-size: 1.35rem;
+            color: var(--text-primary);
+        }
+
+        .day-number {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+            padding: 6px 14px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+        }
+
+        .topic-session {
+            margin: 14px 0;
+            padding: 14px 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-2);
+            transition: all 0.3s ease;
+        }
+
+        .topic-session:hover {
+            background: var(--bg-secondary);
+            border-left-color: var(--accent-1);
+            transform: translateX(6px);
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.1);
+        }
+
+        .topic-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+
+        .topic-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            gap: 12px;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-badge:hover {
+            transform: scale(1.1);
+        }
+
+        .difficulty-easy {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .difficulty-medium {
+            background: rgba(249, 115, 22, 0.15);
+            color: var(--accent-3);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+
+        .difficulty-hard {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .difficulty-very-hard {
+            background: rgba(139, 92, 246, 0.15);
+            color: #a855f7;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .revision-day {
+            border-left-color: var(--accent-3) !important;
+            background: rgba(249, 115, 22, 0.05) !important;
+        }
+
+        /* ==================== LOADING STATE ==================== */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--accent-1);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .spinner::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-right-color: var(--accent-2);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite reverse;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ==================== FEATURES SECTION ==================== */
+        .features-section {
+            padding: 80px 20px;
+            background: var(--bg-secondary);
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            padding: 40px;
+            background: var(--bg-primary);
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-main);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent-1);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(-5deg);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover h3 {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        /* ==================== FOOTER ==================== */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 2px solid var(--border-color);
+            padding: 60px 20px 40px;
+            text-align: center;
+            color: var(--text-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-1), transparent);
+        }
+
+        footer p {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin: 0;
+            transition: color 0.3s ease;
+        }
+
+        footer:hover p {
+            color: var(--accent-1);
+        }
+
+        /* ==================== EMPTY STATE ==================== */
+        .empty-topics {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-topics i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        /* ==================== SCROLL TO TOP BUTTON ==================== */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-main);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 24px rgba(6, 182, 212, 0.4);
+            z-index: 999;
+        }
+
+        .scroll-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            bottom: 50px;
+        }
+
+        .scroll-to-top:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 12px 36px rgba(6, 182, 212, 0.6);
+        }
+
+        .scroll-to-top:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            .scroll-to-top {
+                width: 45px;
+                height: 45px;
+                bottom: 25px;
+                right: 20px;
+                font-size: 1.2rem;
+            }
+
+            .scroll-to-top.show {
+                bottom: 35px;
+            }
+        }
+
+        /* ==================== CTA PULSE ANIMATION ==================== */
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.1);
+            }
+            50% {
+                box-shadow: 0 15px 50px rgba(6, 182, 212, 0.6), inset 0 0 30px rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        .hero .btn-primary {
+            animation: pulse-glow 2.5s ease-in-out infinite;
+        }
+
+        /* ==================== GRADIENT OVERLAY ENHANCEMENTS ==================== */
+        .section-title::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--accent-1), transparent);
+            opacity: 0.1;
+            filter: blur(40px);
+            pointer-events: none;
+        }
+
+        /* ==================== ENHANCED MOBILE TYPOGRAPHY ==================== */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .method-card {
+                padding: 35px 25px;
+            }
+
+            .method-card h3 {
+                font-size: 1.6rem;
+            }
+
+            .method-card p {
+                font-size: 1rem;
+            }
+
+            .feature-card {
+                padding: 30px 20px;
+            }
+
+            .feature-icon {
+                font-size: 2.5rem;
+            }
+
+            .feature-card h3 {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* ==================== ENHANCED FORM INTERACTIONS ==================== */
+        .form-group input::placeholder {
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-group input:focus::placeholder {
+            opacity: 0.3;
+        }
+
+        /* ==================== SKELETON LOADER ==================== */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color) 50%, var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* ==================== ENHANCED BUTTON STATES ==================== */
+        button:not(:disabled):active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* ==================== SECTION SPACING & BALANCE ==================== */
+        section {
+            scroll-margin-top: 80px;
+        }
+
+        /* ==================== TOUCH-FRIENDLY TARGETS ==================== */
+        @media (max-width: 768px) {
+            button,
+            a,
+            .nav-link {
+                min-height: 44px;
+                min-width: 44px;
+            }
+        }
+
+        .upcoming-section {
+            padding: 60px 20px;
+            background: var(--bg-primary);
+        }
+
+        .upcoming-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .upcoming-card {
+            position: relative;
+            padding: 30px;
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .upcoming-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-1);
+        }
+
+        .feature-status {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .feature-status.beta {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+        }
+
+        .feature-icon-large {
+            font-size: 3.5rem;
+            margin: 15px 0;
+        }
+
+        .upcoming-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .upcoming-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .feature-timeline {
+            display: inline-block;
+            background: var(--accent-1);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* ==================== PRICING SECTION ==================== */
+        .pricing-section {
+            padding: 60px 20px;
+            background: var(--bg-secondary);
+        }
+
+        .pricing-grid {
+            max-width: 1100px;
+            margin: 0 auto 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .pricing-card {
+            position: relative;
+            padding: 35px 25px;
+            background: var(--bg-primary);
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .pricing-card.popular {
+            border-color: var(--accent-1);
+            transform: scale(1.05);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-main);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .plan-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .plan-header h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 10px 0;
+        }
+
+        .price span {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        .plan-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 10px;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .plan-features li {
+            padding: 12px 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-features i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .plan-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .free-btn {
+            background: var(--bg-secondary);
+            color: var(--accent-1);
+            border: 2px solid var(--accent-1);
+        }
+
+        .free-btn:hover {
+            background: var(--accent-1);
+            color: white;
+        }
+
+        .pro-btn {
+            background: var(--gradient-main);
+            color: white;
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+        }
+
+        .pro-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(6, 182, 212, 0.4);
+        }
+
+        .elite-btn {
+            background: var(--bg-secondary);
+            color: var(--accent-3);
+            border: 2px solid var(--accent-3);
+        }
+
+        .elite-btn:hover {
+            background: var(--accent-3);
+            color: white;
+        }
+
+        .no-credit,
+        .trial-info {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        /* ==================== COMPARISON TABLE ==================== */
+        .comparison-section {
+            max-width: 1000px;
+            margin: 50px auto;
+        }
+
+        .comparison-table {
+            overflow-x: auto;
+            background: var(--bg-primary);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background: var(--gradient-main);
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .comparison-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* ==================== FAQ SECTION ==================== */
+        .faq-section {
+            max-width: 1000px;
+            margin: 50px auto 0;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .faq-item {
+            padding: 25px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-1);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .faq-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .faq-item h4 i {
+            color: var(--accent-2);
+        }
+
+        .faq-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ==================== ENHANCED ACCESSIBILITY ==================== */
+        /* High contrast focus states for accessibility */
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid var(--accent-1);
+            outline-offset: 2px;
+        }
+
+        /* ==================== TEXT SELECTION ==================== */
+        ::selection {
+            background: var(--accent-1);
+            color: white;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-2);
+        }
+    </style>
 </head>
+<body data-theme="light">
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="#home">
+                <i class="fas fa-graduation-cap"></i>
+                StudyPlanner AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#planner">Plan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="chat.html">Chat AI</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-<body>
-    <div class="app-container">
-        <main class="chat-area">
-            <header class="chat-header">
-                <div class="chat-contact-info">
-                    <div class="logo">
-                        <i class="fa-solid fa-bolt"></i>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>📚 Transform Your Exam Prep</h1>
+            <p>AI-powered study planning. Generate personalized schedules in seconds.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="scrollToPlanner()">
+                    Start Planning Now <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="btn-secondary" onclick="goToChat()">
+                    <i class="fas fa-comments"></i> Try AI Chat
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PLANNER SECTION ==================== -->
+    <section class="planner-section" id="planner">
+        <h2 class="section-title">Choose Your Study Method</h2>
+        
+        <div class="study-methods-container">
+            <!-- MANUAL PLANNER CARD -->
+            <div class="method-card manual-card">
+                <div class="method-icon">📋</div>
+                <h3>Manual Schedule Builder</h3>
+                <p>Create a detailed study plan by specifying your exam date, subjects, and daily study hours.</p>
+                <ul class="method-features">
+                    <li><i class="fas fa-check"></i> Fine-grained control</li>
+                    <li><i class="fas fa-check"></i> Custom difficulty levels</li>
+                    <li><i class="fas fa-check"></i> Instant schedule generation</li>
+                </ul>
+                <button class="btn-method" onclick="scrollToManualPlanner()">
+                    <i class="fas fa-arrow-down"></i> Open Planner
+                </button>
+            </div>
+
+            <!-- AI CHAT CARD -->
+            <div class="method-card chat-card">
+                <div class="method-icon">🤖</div>
+                <h3>AI Chat Assistant</h3>
+                <p>Have a natural conversation with our AI to create the perfect study plan for you.</p>
+                <ul class="method-features">
+                    <li><i class="fas fa-check"></i> Conversational interface</li>
+                    <li><i class="fas fa-check"></i> Personalized recommendations</li>
+                    <li><i class="fas fa-check"></i> Real-time guidance</li>
+                </ul>
+                <button class="btn-method" onclick="goToChat()">
+                    <i class="fas fa-comments"></i> Start Chat
+                </button>
+            </div>
+        </div>
+
+        <!-- MANUAL PLANNER FORM (Hidden by default) -->
+        <div class="manual-planner" id="manualPlanner">
+            <button class="close-planner" onclick="closeManualPlanner()">&times;</button>
+            <div class="planner-container">
+                <h2 style="text-align: center; margin-bottom: 30px; color: var(--text-primary);">
+                    <i class="fas fa-calendar-alt"></i> Create Your Schedule
+                </h2>
+
+                <!-- EXAM INFO -->
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="examDate">
+                            <i class="fas fa-calendar"></i> Exam Date
+                        </label>
+                        <input type="date" id="examDate" required>
                     </div>
-                    <div class="header-text">
-                        <span class="name">Nexus AI</span>
-                        <span class="status">Always Online</span>
+                    <div class="form-group">
+                        <label for="dailyHours">
+                            <i class="fas fa-clock"></i> Study Hours Per Day
+                        </label>
+                        <input type="number" id="dailyHours" min="0.5" step="0.5" value="2.5" required>
                     </div>
                 </div>
-                <div class="header-actions">
-                    <button class="icon-btn" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
-                    <button class="icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+
+                <!-- TOPICS SECTION -->
+                <div class="topics-header">
+                    <h3 class="topics-title"><i class="fas fa-book"></i> Subjects to Study</h3>
+                    <button class="add-topic-btn" onclick="addTopic()">
+                        <i class="fas fa-plus"></i> Add Subject
+                    </button>
                 </div>
-            </header>
-            <div class="messages-container" id="messagesContainer">
-                <div class="message received">
-                    <div class="message-content">
-                        Hello! I'm Nexus AI. How can I assist you today?
-                    </div>
-                    <span class="message-time">Now</span>
+
+                <div class="topics-container" id="topicsContainer"></div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="action-buttons">
+                    <button class="btn-generate" onclick="generateSchedule()">
+                        <i class="fas fa-rocket"></i> Generate Schedule
+                    </button>
+                </div>
+
+                <!-- LOADING STATE -->
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Creating your perfect study plan...</p>
+                </div>
+
+                <!-- SCHEDULE DISPLAY -->
+                <div class="schedule-container" id="scheduleContainer"></div>
+            </div>
+        </div>
+    </section>
+
+
+        <!-- ==================== FEATURES SECTION ==================== -->
+    <section class="features-section" id="features">
+        <h2 class="section-title">Why Choose StudyPlanner AI?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI-Powered</h3>
+                <p>Advanced algorithms understand your learning pace and optimize schedules automatically.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Instant Plans</h3>
+                <p>Get a complete study schedule in seconds, not hours. Start studying immediately.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Smart Distribution</h3>
+                <p>Topics are intelligently distributed based on difficulty and your available time.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Revision Built-In</h3>
+                <p>Automatic revision days scheduled before your exam for optimal retention.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Chat Interface</h3>
+                <p>Talk naturally with our AI assistant. No forms needed, just conversation.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Beautiful Design</h3>
+                <p>Modern, minimal interface that's enjoyable to use every single day.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="upcoming-section">
+        <div class="container">
+            <h2 class="section-title">🚀 Upcoming Features</h2>
+            <p style="text-align: center; color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto 50px;">
+                We're constantly working on exciting new features to make your study experience even better. Here's what's coming soon!
+            </p>
+
+            <!-- Upcoming Features Grid -->
+            <div class="upcoming-grid">
+                <div class="upcoming-card">
+                    <div class="feature-status beta">COMING SOON</div>
+                    <div class="feature-icon-large">🎤</div>
+                    <h3>Voice Assistant</h3>
+                    <p>Speak your study goals naturally and let our voice-enabled AI create schedules through conversation. Hands-free planning on the go.</p>
+                    <div class="feature-timeline">Q1 2026</div>
+                </div>
+
+                <div class="upcoming-card">
+                    <div class="feature-status beta">COMING SOON</div>
+                    <div class="feature-icon-large">📎</div>
+                    <h3>File Attachments</h3>
+                    <p>Upload PDFs, syllabi, and notes. Our AI analyzes them to generate even more personalized study plans based on your actual course materials.</p>
+                    <div class="feature-timeline">Q1 2026</div>
+                </div>
+
+                <div class="upcoming-card">
+                    <div class="feature-status beta">COMING SOON</div>
+                    <div class="feature-icon-large">👥</div>
+                    <h3>Group Study</h3>
+                    <p>Create group study sessions with classmates. Share schedules, collaborate on topics, and track group progress together.</p>
+                    <div class="feature-timeline">Q2 2026</div>
+                </div>
+
+                <div class="upcoming-card">
+                    <div class="feature-status beta">COMING SOON</div>
+                    <div class="feature-icon-large">📱</div>
+                    <h3>Mobile App</h3>
+                    <p>Native iOS and Android apps with offline access. Study schedules, notifications, and progress tracking right from your phone.</p>
+                    <div class="feature-timeline">Q2 2026</div>
+                </div>
+
+                <div class="upcoming-card">
+                    <div class="feature-status beta">COMING SOON</div>
+                    <div class="feature-icon-large">🔔</div>
+                    <h3>Smart Notifications</h3>
+                    <p>Intelligent reminders for study sessions based on your habits. Customizable alerts via email, SMS, and push notifications.</p>
+                    <div class="feature-timeline">Q1 2026</div>
+                </div>
+
+                <div class="upcoming-card">
+                    <div class="feature-status beta">COMING SOON</div>
+                    <div class="feature-icon-large">📈</div>
+                    <h3>Progress Analytics</h3>
+                    <p>Detailed insights into your study patterns. Visual dashboards showing completion rates, optimal study times, and performance trends.</p>
+                    <div class="feature-timeline">Q2 2026</div>
+                </div>
+
+                <div class="upcoming-card">
+                    <div class="feature-status beta">COMING SOON</div>
+                    <div class="feature-icon-large">🧠</div>
+                    <h3>AI Tutoring</h3>
+                    <p>Get instant help with difficult topics. Ask questions, get explanations, and receive personalized learning resources from our AI tutor.</p>
+                    <div class="feature-timeline">Q2 2026</div>
+                </div>
+
+                <div class="upcoming-card">
+                    <div class="feature-status beta">COMING SOON</div>
+                    <div class="feature-icon-large">🎓</div>
+                    <h3>Integration Hub</h3>
+                    <p>Connect with Google Calendar, Microsoft Teams, Discord, and more. Sync your study schedule with tools you already use.</p>
+                    <div class="feature-timeline">Q3 2026</div>
+                </div>
+
+                <div class="upcoming-card">
+                    <div class="feature-status beta">COMING SOON</div>
+                    <div class="feature-icon-large">🏆</div>
+                    <h3>Gamification</h3>
+                    <p>Earn badges, unlock achievements, and compete on leaderboards. Make studying fun with points, streaks, and rewards.</p>
+                    <div class="feature-timeline">Q3 2026</div>
                 </div>
             </div>
-            <div class="input-area">
-                <div id="attachmentPreview" class="attachment-preview-container" style="display: none;">
-                    <div class="preview-content">
-                        <img id="previewImage" src="" alt="Preview" style="display: none;">
-                        <div id="previewFile" style="display: none;">
-                            <i class="fa-solid fa-file-pdf"></i>
-                            <span id="previewFileName"></span>
-                        </div>
-                        <button id="removeAttachmentBtn" class="remove-attachment-btn"><i
-                                class="fa-solid fa-xmark"></i></button>
+        </div>
+    </section>
+
+    <!-- ==================== PRICING SECTION ==================== -->
+    <section class="pricing-section">
+        <div class="container">
+            <h2 class="section-title">💳 Pricing Plans</h2>
+            <p style="text-align: center; color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto 50px;">
+                Choose the perfect plan for your study needs. Start free, upgrade anytime.
+            </p>
+
+            <div class="pricing-grid">
+                <!-- Free Plan -->
+                <div class="pricing-card">
+                    <div class="plan-header">
+                        <h3>Free</h3>
+                        <div class="price">$0<span>/month</span></div>
+                        <p class="plan-description">Perfect to get started</p>
                     </div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Create unlimited schedules</li>
+                        <li><i class="fas fa-check"></i> Add up to 5 subjects</li>
+                        <li><i class="fas fa-check"></i> Chat with AI assistant</li>
+                        <li><i class="fas fa-check"></i> Export schedule (PDF)</li>
+                        <li><i class="fas fa-times"></i> Voice assistant</li>
+                        <li><i class="fas fa-times"></i> File attachments</li>
+                        <li><i class="fas fa-times"></i> Progress analytics</li>
+                        <li><i class="fas fa-times"></i> Priority support</li>
+                    </ul>
+                    <button class="plan-btn free-btn">Get Started Free</button>
+                    <p class="no-credit">No credit card required</p>
                 </div>
-                <input type="file" id="fileInput" hidden accept="image/*,.pdf">
-                <div class="input-controls">
-                    <button class="icon-btn attach-btn" id="attachBtn"><i class="fa-solid fa-paperclip"></i></button>
-                    <div class="input-wrapper">
-                        <input type="text" id="messageInput" placeholder="Message Nexus AI...">
-                        <button class="icon-btn emoji-btn" id="emojiBtn"><i
-                                class="fa-regular fa-face-smile"></i></button>
-                        <div class="emoji-picker" id="emojiPicker">
-                            <div class="emoji-grid">
-                                <span>😀</span><span>😃</span><span>😄</span><span>😁</span><span>😆</span><span>😅</span>
-                                <span>😂</span><span>🤣</span><span>😊</span><span>😇</span><span>🙂</span><span>🙃</span>
-                                <span>😉</span><span>😌</span><span>😍</span><span>🥰</span><span>😘</span><span>😗</span>
-                                <span>😙</span><span>😚</span><span>😋</span><span>😛</span><span>😜</span><span>😝</span>
-                                <span>🤪</span><span>🤨</span><span>🧐</span><span>🤓</span><span>😎</span><span>🤩</span>
-                                <span>🥳</span><span>😏</span><span>😒</span><span>😞</span><span>😔</span><span>😟</span>
-                                <span>😕</span><span>🙁</span><span>☹️</span><span>😣</span><span>😖</span><span>😫</span>
-                                <span>😩</span><span>🥺</span><span>😢</span><span>😭</span><span>😤</span><span>😠</span>
-                                <span>😡</span><span>🤬</span><span>🤯</span><span>😳</span><span>🥵</span><span>🥶</span>
-                                <span>😱</span><span>😨</span><span>😰</span><span>😥</span><span>😓</span><span>🤗</span>
-                                <span>🤔</span><span>🤭</span><span>🤫</span><span>🤥</span><span>😶</span><span>😐</span>
-                                <span>😑</span><span>😬</span><span>🙄</span><span>😯</span><span>😦</span><span>😧</span>
-                                <span>😮</span><span>😲</span><span>🥱</span><span>😴</span><span>🤤</span><span>😪</span>
-                                <span>😵</span><span>🤐</span><span>🥴</span><span>🤢</span><span>🤮</span><span>🤧</span>
-                                <span>😷</span><span>🤒</span><span>🤕</span><span>🤑</span><span>🤠</span><span>😈</span>
-                                <span>👿</span><span>👹</span><span>👺</span><span>🤡</span><span>💩</span><span>👻</span>
-                                <span>💀</span><span>☠️</span><span>👽</span><span>👾</span><span>🤖</span><span>🎃</span>
-                                <span>😺</span><span>😸</span><span>😹</span><span>😻</span><span>😼</span><span>😽</span>
-                                <span>🙀</span><span>😿</span><span>😾</span><span>👍</span><span>👎</span><span>👊</span>
-                                <span>✊</span><span>🤛</span><span>🤜</span><span>🤞</span><span>✌️</span><span>🤟</span>
-                                <span>🤘</span><span>👌</span><span>🤏</span><span>👈</span><span>👉</span><span>👆</span>
-                                <span>👇</span><span>☝️</span><span>✋</span><span>🤚</span><span>🖐</span><span>🖖</span>
-                                <span>👋</span><span>🤙</span><span>💪</span><span>🦾</span><span>🖕</span><span>✍️</span>
-                                <span>🙏</span><span>🦶</span><span>🦵</span><span>🦿</span><span>💄</span><span>💋</span>
-                                <span>👄</span><span>🦷</span><span>👅</span><span>👂</span><span>🦻</span><span>👃</span>
-                                <span>👣</span><span>👁</span><span>👀</span><span>🧠</span><span>🗣</span><span>👤</span>
-                                <span>👥</span><span>🫂</span>
-                            </div>
-                        </div>
+
+                <!-- Pro Plan (Popular) -->
+                <div class="pricing-card popular">
+                    <div class="popular-badge">MOST POPULAR</div>
+                    <div class="plan-header">
+                        <h3>Pro</h3>
+                        <div class="price">$9.99<span>/month</span></div>
+                        <p class="plan-description">For serious students</p>
                     </div>
-                    <button class="send-btn" id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Everything in Free +</li>
+                        <li><i class="fas fa-check"></i> Unlimited subjects</li>
+                        <li><i class="fas fa-check"></i> Voice assistant</li>
+                        <li><i class="fas fa-check"></i> Upload up to 50 files</li>
+                        <li><i class="fas fa-check"></i> Progress analytics</li>
+                        <li><i class="fas fa-check"></i> Smart notifications</li>
+                        <li><i class="fas fa-check"></i> Group study features</li>
+                        <li><i class="fas fa-times"></i> AI tutoring (advanced)</li>
+                    </ul>
+                    <button class="plan-btn pro-btn">Start 7-Day Trial</button>
+                    <p class="trial-info">First week free, then $9.99/month</p>
+                </div>
+
+                <!-- Elite Plan -->
+                <div class="pricing-card">
+                    <div class="plan-header">
+                        <h3>Elite</h3>
+                        <div class="price">$19.99<span>/month</span></div>
+                        <p class="plan-description">Maximum potential</p>
+                    </div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Everything in Pro +</li>
+                        <li><i class="fas fa-check"></i> Unlimited file uploads</li>
+                        <li><i class="fas fa-check"></i> AI Tutoring (24/7)</li>
+                        <li><i class="fas fa-check"></i> Advanced analytics</li>
+                        <li><i class="fas fa-check"></i> Priority support (1-hour response)</li>
+                        <li><i class="fas fa-check"></i> Custom integrations</li>
+                        <li><i class="fas fa-check"></i> Team collaboration (10 members)</li>
+                        <li><i class="fas fa-check"></i> Offline mobile app</li>
+                    </ul>
+                    <button class="plan-btn elite-btn">Start 7-Day Trial</button>
+                    <p class="trial-info">First week free, then $19.99/month</p>
                 </div>
             </div>
-        </main>
-    </div>
-    <script src="script.js"></script>
-</body>
 
-</html>
+            <!-- Comparison Table -->
+            <div class="comparison-section">
+                <h3 style="text-align: center; color: var(--text-primary); margin-bottom: 30px;">Feature Comparison</h3>
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Free</th>
+                                <th>Pro</th>
+                                <th>Elite</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Unlimited Schedules</td>
+                                <td><i class="fas fa-check" style="color: var(--accent-2);"></i></td>
+                                <td><i class="fas fa-check" style="color: var(--accent-2);"></i></td>
+                                <td><i class="fas fa-check" style="color: var(--accent-2);"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Max Subjects</td>
+                                <td>5</td>
+                                <td>Unlimited</td>
+                                <td>Unlimited</td>
+                            </tr>
+                            <tr>
+                                <td>Voice Assistant</td>
+                                <td><i class="fas fa-times" style="color: #ef4444;"></i></td>
+                                <td><i class="fas fa-check" style="color: var(--accent-2);"></i></td>
+                                <td><i class="fas fa-check" style="color: var(--accent-2);"></i></td>
+                            </tr>
+                            <tr>
+                                <td>File Uploads</td>
+                                <td>0</td>
+                                <td>50/month</td>
+                                <td>Unlimited</td>
+                            </tr>
+                            <tr>
+                                <td>Progress Analytics</td>
+                                <td><i class="fas fa-times" style="color: #ef4444;"></i></td>
+                                <td><i class="fas fa-check" style="color: var(--accent-2);"></i></td>
+                                <td><i class="fas fa-check" style="color: var(--accent-2);"></i></td>
+                            </tr>
+                            <tr>
+                                <td>AI Tutoring</td>
+                                <td><i class="fas fa-times" style="color: #ef4444;"></i></td>
+                                <td><i class="fas fa-times" style="color: #ef4444;"></i></td>
+                                <td><i class="fas fa-check" style="color: var(--accent-2);"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Priority Support</td>
+                                <td><i class="fas fa-times" style="color: #ef4444;"></i></td>
+                                <td><i class="fas fa-times" style="color: #ef4444;"></i></td>
+                                <td><i class="fas fa-check" style="color: var(--accent-2);"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Team Collaboration</td>
+                                <td><i class="fas fa-times" style="color: #ef4444;"></i></td>
+                                <td>Up to 5</td>
+                                <td>Up to 10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h3 style="text-align: center; color: var(--text-primary); margin-bottom: 30px;">Frequently Asked Questions</h3>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question-circle"></i> Can I cancel anytime?</h4>
+                        <p>Yes! Cancel your subscription at any time. No questions asked. Your data remains accessible for 30 days.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question-circle"></i> Is there a student discount?</h4>
+                        <p>Yes! Verify your student status and get 50% off Pro plan. Email us at students@studyplanner.ai</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question-circle"></i> What payment methods do you accept?</h4>
+                        <p>We accept all major credit cards and various local payment methods.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question-circle"></i> Is my data secure?</h4>
+                        <p>Absolutely. All data is encrypted with 256-bit SSL. We never share your information with third parties.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==================== SCROLL TO TOP BUTTON ==================== -->
+    <button class="scroll-to-top" id="scrollToTop" title="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+        <p>&copy; 2026 StudyPlanner AI. Transform your exam prep. Built by <a href="https://farhanincode.netlify.app" target="_blank" rel="noopener noreferrer">Farhan</a> with ❤️ for students.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:8000/';
+        let topicCount = 0;
+
+        // ==================== THEME TOGGLE ====================
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            themeToggle.innerHTML = theme === 'light' 
+                ? '<i class="fas fa-moon"></i>' 
+                : '<i class="fas fa-sun"></i>';
+        }
+
+        // Initialize theme from localStorage
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        // ==================== SCROLL FUNCTIONS ====================
+        function scrollToPlanner() {
+            document.getElementById('planner').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToManualPlanner() {
+            const manualPlanner = document.getElementById('manualPlanner');
+            manualPlanner.classList.add('show');
+        }
+
+        function closeManualPlanner() {
+            const manualPlanner = document.getElementById('manualPlanner');
+            manualPlanner.classList.remove('show');
+        }
+
+        function goToChat() {
+            window.location.href = 'chat.html';
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const manualPlanner = document.getElementById('manualPlanner');
+            if (e.target === manualPlanner) {
+                closeManualPlanner();
+            }
+        });
+
+        // ==================== SCROLL ANIMATIONS ====================
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe feature cards and method cards on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.feature-card, .method-card');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+
+            // Keyboard navigation for modals
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const manualPlanner = document.getElementById('manualPlanner');
+                    if (manualPlanner.classList.contains('show')) {
+                        closeManualPlanner();
+                    }
+                }
+                // Tab through inputs
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    const manualPlanner = document.getElementById('manualPlanner');
+                    if (manualPlanner.classList.contains('show')) {
+                        generateSchedule();
+                    }
+                }
+            });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', (e) => {
+                    const href = anchor.getAttribute('href');
+                    if (href !== '#' && document.querySelector(href)) {
+                        e.preventDefault();
+                        document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+
+        // ==================== TOPIC MANAGEMENT ====================
+        function addTopic() {
+            topicCount++;
+            const topicsContainer = document.getElementById('topicsContainer');
+            
+            const topicCard = document.createElement('div');
+            topicCard.className = 'topic-card';
+            topicCard.id = `topic-${topicCount}`;
+            topicCard.innerHTML = `
+                <input type="text" placeholder="Subject name" class="topic-name" required>
+                <select class="topic-difficulty" required>
+                    <option value="">Difficulty</option>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                    <option value="very_hard">Very Hard</option>
+                </select>
+                <input type="number" placeholder="Hours" class="topic-hours" min="1" value="3" required>
+                <button type="button" class="remove-topic-btn" onclick="removeTopic(${topicCount})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            topicsContainer.appendChild(topicCard);
+        }
+
+        function removeTopic(id) {
+            const topic = document.getElementById(`topic-${id}`);
+            if (topic) {
+                topic.remove();
+            }
+        }
+
+        // ==================== SCHEDULE GENERATION ====================
+        async function generateSchedule() {
+            const examDate = document.getElementById('examDate').value;
+            const dailyHours = parseFloat(document.getElementById('dailyHours').value);
+            const topicElements = document.querySelectorAll('.topic-card');
+
+            if (!examDate || !dailyHours) {
+                alert('Please fill in exam date and daily hours');
+                return;
+            }
+
+            if (topicElements.length === 0) {
+                alert('Please add at least one subject');
+                return;
+            }
+
+            const topics = [];
+            for (const el of topicElements) {
+                const name = el.querySelector('.topic-name').value.trim();
+                const difficulty = el.querySelector('.topic-difficulty').value;
+                const baseHours = parseFloat(el.querySelector('.topic-hours').value);
+
+                if (!name || !difficulty) {
+                    alert('Please complete all subject fields');
+                    return;
+                }
+
+                topics.push({ name, difficulty, base_hours: baseHours });
+            }
+
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('scheduleContainer').classList.remove('show');
+
+            try {
+                const response = await fetch(`${API_BASE}/plan`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ exam_date: examDate, topics, daily_hours: dailyHours })
+                });
+                const result = await response.json();
+            document.getElementById('loading').classList.remove('show');
+
+            if (result.success) {
+                displaySchedule(result.schedule, result.metadata, examDate, dailyHours);
+            } else {
+                alert('Error: ' + (result.error || 'Unknown error'));
+            }
+        } catch (error) {
+            document.getElementById('loading').classList.remove('show');
+            alert('Error: ' + error.message);
+        }
+    }
+
+    function displaySchedule(schedule, metadata, examDate, dailyHours) {
+        const container = document.getElementById('scheduleContainer');
+        const examDateObj = new Date(examDate);
+        const todayDateObj = new Date();
+        
+        let html = `
+            <h2 style="margin-bottom: 25px; color: var(--text-primary);">
+                <i class="fas fa-calendar-check"></i> Your Personalized Study Plan
+            </h2>
+
+            <div class="schedule-header">
+                <div class="stat-card">
+                    <div class="stat-value">${metadata.days_until_exam}</div>
+                    <div class="stat-label">Days to Exam</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${metadata.total_hours_needed}</div>
+                    <div class="stat-label">Total Hours Needed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${metadata.total_hours_available.toFixed(1)}</div>
+                    <div class="stat-label">Hours Available</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${metadata.status}</div>
+                    <div class="stat-label">Schedule Status</div>
+                </div>
+            </div>
+
+            ${metadata.warnings.length > 0 ? `
+                <div style="background: rgba(249, 115, 22, 0.1); border-left: 4px solid var(--accent-3); padding: 15px; border-radius: 8px; margin-bottom: 25px;">
+                    <p style="color: var(--text-primary); font-weight: 600; margin: 0;"><i class="fas fa-exclamation-triangle"></i> ${metadata.warnings[0]}</p>
+                </div>
+            ` : ''}
+
+            <div class="schedule-grid">
+        `;
+
+        const sortedDates = Object.keys(schedule).sort();
+        let dayNumber = 1;
+
+        for (const date of sortedDates) {
+            const dateObj = new Date(date + 'T00:00:00');
+            const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+            const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const topics = schedule[date];
+            let totalHours = 0;
+
+            const isRevision = topics.some(t => t.type === 'revision');
+
+            html += `
+                <div class="day-card ${isRevision ? 'revision-day' : ''}">
+                    <div class="day-header">
+                        <div>
+                            <div class="day-date">${dayName}</div>
+                            <small style="color: var(--text-secondary);">${formattedDate}</small>
+                        </div>
+                        <div class="day-number">Day ${dayNumber}</div>
+                    </div>
+            `;
+
+            for (const topic of topics) {
+                totalHours += topic.hours;
+                const difficultyClass = `difficulty-${topic.difficulty}`;
+                
+                html += `
+                    <div class="topic-session">
+                        <div class="topic-name">${topic.topic}</div>
+                        <div class="topic-info">
+                            <span class="difficulty-badge ${difficultyClass}">${topic.difficulty.toUpperCase()}</span>
+                            <span><i class="fas fa-hourglass-end"></i> ${topic.hours} hours</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); color: var(--text-primary); font-weight: 600;">
+                    <i class="fas fa-check-circle"></i> Total: ${totalHours.toFixed(1)} hours
+                </div>
+                </div>
+            `;
+
+            dayNumber++;
+        }
+
+        html += `
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color);">
+                <h4 style="color: var(--text-primary); margin-bottom: 15px;"><i class="fas fa-lightbulb"></i> Study Tips</h4>
+                <ul style="list-style: none; padding: 0;">
+                    ${metadata.tips.map(tip => `
+                        <li style="color: var(--text-secondary); margin: 10px 0; padding-left: 25px; position: relative;">
+                            <i class="fas fa-star" style="position: absolute; left: 0; color: var(--accent-2);"></i>
+                            ${tip}
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        `;
+
+        container.innerHTML = html;
+        container.classList.add('show');
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Initialize with one empty topic
+    addTopic();
+
+    // ==================== SCROLL TO TOP FUNCTIONALITY ====================
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+
+    // Show button when scrolled down
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollToTopBtn.classList.add('show');
+        } else {
+            scrollToTopBtn.classList.remove('show');
+        }
+    });
+
+    // Smooth scroll to top
+    scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // ==================== SECTION REVEAL ANIMATIONS ====================
+    document.addEventListener('DOMContentLoaded', () => {
+        // Stagger animation for list items
+        document.querySelectorAll('.method-features li').forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Observe upcoming cards
+        const upcomingCards = document.querySelectorAll('.upcoming-card');
+        upcomingCards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Observe pricing cards
+        const pricingCards = document.querySelectorAll('.pricing-card');
+        pricingCards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    });
+
+    // ==================== ENHANCED KEYBOARD NAVIGATION ====================
+    document.addEventListener('keydown', (e) => {
+        // Alt + S to scroll to planner
+        if (e.altKey && e.key === 's') {
+            e.preventDefault();
+            scrollToPlanner();
+        }
+        // Alt + C to go to chat
+        if (e.altKey && e.key === 'c') {
+            e.preventDefault();
+            goToChat();
+        }
+        // Alt + H to go to home
+        if (e.altKey && e.key === 'h') {
+            e.preventDefault();
+            document.getElementById('home').scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+
+    // ==================== DETECT REDUCED MOTION PREFERENCE ====================
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+        document.documentElement.style.scrollBehavior = 'auto';
+    }
+</script>

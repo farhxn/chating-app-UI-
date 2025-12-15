@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Study Planner Chat</title>
+    <link rel="stylesheet" href="chat-style.css">
+</head>
+
+<body data-theme="light">
+    <div class="container">
+        <header class="header">
+            <div class="header-left">
+                <h1>🚀 Study Planner AI</h1>
+                <p>Chat about your exam, get your perfect schedule</p>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center">
+                <button id="schedule-expand-btn" class="theme-toggle" aria-expanded="false" aria-label="Open schedule" title="Open schedule">📅</button>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" title="Dark Mode">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <section class="chat-section">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="message agent slide-in">
+                        <div class="bubble">
+                            <p>👋 Hi! I'm your study planning assistant. Tell me about your exam and I'll create a perfect schedule for you!</p>
+                            <small class="time">Welcome</small>
+                        </div>
+                        <div class="bubble">
+                            <p><small>Example: "I have an exam on Dec 20 about Physics, Chemistry, and Biology. I can study 2.5 hours daily."</small></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="message-input" placeholder="Chat about your exam prep..." autocomplete="off">
+                    <button id="send-btn" class="btn-send">Send 📤</button>
+                </div>
+
+                <div id="suggestions" class="suggestions hidden">
+                    <div class="suggestions-header">
+                        <p><strong>💡 Try these:</strong></p>
+                        <button id="suggestions-close-btn" class="suggestions-close" aria-label="Hide suggestions">✖</button>
+                    </div>
+                    <div id="suggestion-list"></div>
+                </div>
+            </section>
+
+            <!-- Expandable Schedule Panel -->
+            <aside class="schedule-panel" data-expanded="false">
+                <div class="schedule-panel-header">
+                    <h2>📅 Study Sessions Planner</h2>
+                </div>
+                <section id="schedule-section" class="schedule-section hidden">
+                    <div id="schedule-output" class="schedule-content"></div>
+                </section>
+            </aside>
+        </main>
+
+        <footer>
+            <p>Powered by AI Study Planner | Farhan</p>
+        </footer>
+    </div>
+
+    <script src="chat-script.js"></script>
+</body>
+
+</html>
